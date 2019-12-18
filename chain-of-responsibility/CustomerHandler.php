@@ -11,9 +11,13 @@ class CustomerHandler extends BaseHandler
   {
     if (!$this->canHandle($request)) {
       parent::handle($request);
+      return;
     }
 
-    echo $request['customer'] . PHP_EOL;
+    $storage = OrderStorage::getInstance();
+
+    $order = $storage->getOrder($request['order_id']);
+    $order->setCustomer($request['customer']);
 
     parent::handle($request);
   }

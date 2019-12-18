@@ -11,9 +11,13 @@ class PaymentHandler extends BaseHandler
   {
     if (!$this->canHandle($request)) {
       parent::handle($request);
+      return;
     }
 
-    echo $request['payment'] . PHP_EOL;
+    $storage = OrderStorage::getInstance();
+
+    $order = $storage->getOrder($request['order_id']);
+    $order->setPayment($request['payment']);
 
     parent::handle($request);
   }
