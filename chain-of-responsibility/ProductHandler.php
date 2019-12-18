@@ -11,9 +11,13 @@ class ProductHandler extends BaseHandler
   {
     if (!$this->canHandle($request)) {
       parent::handle($request);
+      return;
     }
 
-    echo $request['product'] . PHP_EOL;
+    $storage = OrderStorage::getInstance();
+
+    $order = $storage->getOrder($request['order_id']);
+    $order->setProduct($request['product']);
 
     parent::handle($request);
   }
