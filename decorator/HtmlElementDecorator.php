@@ -2,7 +2,7 @@
 
 abstract class HtmlElementDecorator implements HtmlElement, Renderable
 {
-  private $decoratedHtmlElement;
+  protected $decoratedHtmlElement;
 
   /** @var array $attributes */
   protected $attributes;
@@ -12,6 +12,40 @@ abstract class HtmlElementDecorator implements HtmlElement, Renderable
     $this->decoratedHtmlElement = $element;
     $this->attributes = [];
   }
+
+  public function getAttributes()
+  {
+    if ($this->decoratedHtmlElement instanceof HtmlElementDecorator) {
+      return $this->mergeAttributes(
+        $this->attributes,
+        $this->decoratedHtmlElement->getAttributes()
+      );
+    }
+
+    return $this->attributes ?? [];
+  }
+
+  private function mergeAttributes($att1, $att2)
+  {
+    $ret = [];
+
+    $keys = array_unique(array_merge(array_keys($att1), array_keys($att2)));
+
+    foreach ($keys as $key) {
+      $ret[$key] = '';
+
+      if (isset($att1[$key])) {
+        $ret[$key] .= $att1[$key] . ' ';
+      }
+
+      if (isset($att2[$key])) {
+        $ret[$key] .= $att2[$key] . ' ';
+      }
+    }
+
+    return $ret;
+  }
+
 
   protected function addAttr($key, $value)
   {
@@ -41,17 +75,18 @@ abstract class HtmlElementDecorator implements HtmlElement, Renderable
 
   public function render()
   {
-    $newOpeningTag = '<' . $this->decoratedHtmlElement->getTag();
+    $result = '<' . $this->decoratedHtmlElement->getTag();
 
-    foreach ($this->attributes as $key => $value) {
-      $newOpeningTag .= ' '.  $key . '="' . $value . '"';
+    foreach ($this->getAttributes() as $key => $value) {
+      $result .= ' '.  $key . '="' . $value . '"';
     }
 
-    $newOpeningTag .= '>';
+    $result .= '>';
 
-    $oldOpeningTag = '<' . $this->decoratedHtmlElement->getTag() . '>';
+    foreach ($this->getChildren() as $child) {
+      $result .= $child->render();
+    }
 
-    // Not transititive as replace won't be like this anymore, need to add the new styles, but also the keey the old added styles
-    return str_replace ($oldOpeningTag, $newOpeningTag, $this->decoratedHtmlElement->render());
+    return $result .  '</' . $this->getTag() .'>';
   }
 }
