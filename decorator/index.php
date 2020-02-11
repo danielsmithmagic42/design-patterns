@@ -5,11 +5,11 @@ spl_autoload_register(function ($class_name) {
 
 $form = new RedBackgroundDecorator(new Form());
 $form->add(
-  (new Div())
-    ->add(
-      (new WhiteTextDecorator(new LargeFontDecorator(new Paragraph())))
-        ->add(new Text("hello"))
-    )
+    (new Div())
+        ->add(
+            (new WhiteTextDecorator(new LargeFontDecorator(new Paragraph())))
+                ->add(new Text("hello"))
+        )
 );
 
 echo $form->render();

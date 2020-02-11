@@ -2,10 +2,10 @@
 
 class WhiteTextDecorator extends HtmlElementDecorator
 {
-  public function __construct(HtmlElement $element)
-  {
-    parent::__construct($element);
+    public function __construct(HtmlElement $element)
+    {
+        parent::__construct($element);
 
-    $this->addAttr('style', 'color: white;');
-  }
+        $this->addAttr('style', 'color: white;');
+    }
 }

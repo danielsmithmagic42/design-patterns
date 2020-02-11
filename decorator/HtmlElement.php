@@ -2,9 +2,9 @@
 
 interface HtmlElement
 {
-  public function getChildren();
+    public function getChildren();
 
-  public function add($child);
+    public function add($child);
 
-  public function getTag();
+    public function getTag();
 }

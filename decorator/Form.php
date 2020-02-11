@@ -2,8 +2,8 @@
 
 class Form extends SimpleHtmlElement
 {
-  public function __construct()
-  {
-    return parent::__construct('form');
-  }
+    public function __construct()
+    {
+        return parent::__construct('form');
+    }
 }
